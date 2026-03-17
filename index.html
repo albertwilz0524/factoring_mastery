@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Factoring Mastery | Algebra</title>
+    <style>
+        /* CSS VARIABLES & RESET (Pastel Professional Theme) */
+        :root {
+            --bg-body: #f4f7f6;
+            --bg-card: #ffffff;
+            --bg-input: #eef2f3;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --primary: #6c5ce7; /* Pastel Purple */
+            --primary-hover: #5b4bc4;
+            --success: #00b894; /* Pastel Green */
+            --warning: #fdcb6e; /* Pastel Yellow */
+            --error: #ff7675;   /* Pastel Red */
+            --super: #fd79a8;   /* Pastel Pink */
+            --border: #dfe6e9;
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: all 0.2s ease;
+        }
+
+        /* Dark Mode Overrides */
+        [data-theme="dark"] {
+            --bg-body: #1e272e;
+            --bg-card: #2f3640;
+            --bg-input: #353b48;
+            --text-main: #f5f6fa;
+            --text-muted: #7f8fa6;
+            --border: #40739e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        /* UTILITIES */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100dvh;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        
+        .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+        
+        .btn-danger { background: rgba(255, 118, 117, 0.15); color: var(--error); border: 1px solid var(--error); }
+        .btn-danger:hover { background: var(--error); color: white; }
+
+        .btn-icon { padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+
+        /* HEADER */
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .logo { font-size: 1.25rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .header-controls { display: flex; gap: 8px; }
+
+        /* LEVEL SELECTOR */
+        .level-scroller {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .level-chip {
+            flex: 0 0 auto;
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .level-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .level-chip.locked { opacity: 0.5; cursor: not-allowed; background: var(--bg-input); }
+
+        /* MAIN CARD */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-shrink: 1; 
+        }
+
+        .progress-container { margin-bottom: 15px; }
+        .progress-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+        .level-title { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
+        .phase-badge {
+            font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;
+            padding: 3px 10px; border-radius: 6px; background: var(--bg-input); color: var(--text-muted);
+        }
+        .phase-badge.sequential { color: var(--primary); background: rgba(108, 92, 231, 0.1); }
+        .phase-badge.random { color: var(--warning); background: rgba(253, 203, 110, 0.15); }
+        .phase-badge.super { color: var(--super); background: rgba(253, 121, 168, 0.1); }
+        .phase-badge.mastered { color: var(--success); background: rgba(0, 184, 148, 0.1); }
+        
+        .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
+        .progress-text { text-align: right; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-top: 6px; }
+
+        /* QUESTION AREA */
+        .question-area { margin: 20px 0; }
+        .question-text {
+            font-size: clamp(2rem, 7vw, 3rem); 
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin-bottom: 5px;
+            word-break: keep-all;
+            transition: opacity 0.2s;
+        }
+        
+        .sub-text {
+            color: var(--text-muted); font-size: 0.95rem; min-height: 1.2em; transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; font-weight: 600;
+        }
+        .sub-text.big-error { font-size: clamp(1.2rem, 4vw, 1.5rem); font-weight: 800; color: var(--error) !important; min-height: 1.5em; }
+        .sub-text.big-warning { font-size: clamp(1.1rem, 3vw, 1.4rem); font-weight: 800; color: var(--warning) !important; min-height: 1.5em; }
+
+        /* INPUT AREA */
+        .input-wrapper { position: relative; width: 100%; max-width: 300px; margin: 0 auto; }
+        #answerInput {
+            width: 100%; background: var(--bg-input); border: 2px solid transparent;
+            color: var(--text-main); font-size: 1.8rem; font-weight: 700; text-align: center;
+            padding: 12px; border-radius: 12px; outline: none; transition: var(--transition); font-family: 'Courier New', Courier, monospace;
+        }
+        #answerInput.error { border-color: var(--error); animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; color: var(--error); }
+        #answerInput.warning { border-color: var(--warning); animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; color: var(--warning); }
+        #answerInput.success { border-color: var(--success); color: var(--success); }
+
+        /* KEYPAD */
+        #keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: auto;
+            width: 100%;
+            padding-bottom: 10px;
+        }
+        #keypad.disabled { opacity: 0.5; pointer-events: none; }
+        .key-btn {
+            background-color: var(--bg-card); color: var(--text-main); font-size: 1.3rem; font-weight: 700;
+            border: 1px solid var(--border); border-radius: 12px; padding: 14px 0; cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: var(--transition); user-select: none;
+            display: flex; align-items: center; justify-content: center; font-family: inherit;
+        }
+        .key-btn:active, .key-btn.active-visual { transform: scale(0.95); background-color: var(--bg-input); }
+        .key-action { background-color: var(--error); color: white; border-color: var(--error); font-size: 1.1rem; }
+        .key-enter { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3); }
+        .key-enter:hover { background: var(--primary-hover); }
+
+        /* ANIMATIONS */
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            display: none; justify-content: center; align-items: center; z-index: 100; opacity: 0; transition: opacity 0.2s;
+        }
+        .modal-overlay.open { display: flex; opacity: 1; }
+        
+        .modal {
+            background: var(--bg-card); padding: 30px; border-radius: var(--radius); max-width: 400px; width: 90%;
+            border: 1px solid var(--border); box-shadow: var(--shadow); max-height: 85vh; overflow-y: auto;
+        }
+        .modal h2 { margin-bottom: 15px; color: var(--text-main); font-weight: 800; }
+        .modal p { color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+        .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
+        .modal code { background: var(--bg-input); padding: 2px 6px; border-radius: 4px; color: var(--primary); font-family: monospace; font-weight: bold; }
+
+        .modal-input {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);
+            background: var(--bg-input); color: var(--text-main); font-size: 1rem; outline: none; transition: var(--transition);
+        }
+        .modal-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.2); }
+
+        /* STATS GRID */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .stat-cell {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 5px;
+            background: var(--bg-input); border-radius: 8px; color: var(--text-muted); text-align: center; font-weight: bold; font-size: 0.8rem;
+        }
+        .stat-cell.mastered { background: var(--success); color: #fff; }
+
+        /* TOAST */
+        .toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--success); color: white; padding: 12px 24px; border-radius: 30px;
+            font-weight: 700; box-shadow: var(--shadow); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        @media (max-height: 650px) {
+            .card { padding: 15px; margin-bottom: 10px; }
+            #answerInput { font-size: 1.5rem; padding: 8px; }
+            .key-btn { padding: 10px 0; font-size: 1.1rem; }
+            .question-text { font-size: clamp(1.8rem, 6vw, 2.2rem); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">Factoring Mastery</div>
+        <div class="header-controls">
+            <button class="btn btn-ghost btn-icon" id="helpBtn" title="Teacher's Note">🎓</button>
+            <button class="btn btn-ghost btn-icon" id="fastModeToggle" title="Toggle Fast Mode">⚡</button>
+            <button class="btn btn-ghost btn-icon" id="themeToggle" title="Toggle Theme">🌙</button>
+            <button class="btn btn-ghost btn-icon" id="statsBtn" title="Statistics">📊</button>
+        </div>
+    </header>
+
+    <nav class="level-scroller" id="levelNav">
+        <!-- Generated by JS -->
+    </nav>
+
+    <main class="card">
+        <div class="progress-container">
+            <div class="progress-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="level-title" id="levelLabel">Level 1</span>
+                    <button class="btn btn-danger" id="relockBtn" style="font-size: 0.65rem; padding: 4px 8px; border-radius: 6px;" title="Re-lock this level">Re-lock</button>
+                </div>
+                <span class="phase-badge sequential" id="phaseBadge">Learning Phase</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressPercent">0%</div>
+        </div>
+
+        <div class="question-area">
+            <div class="sub-text" id="feedbackMsg">&nbsp;</div>
+            <div class="question-text" id="questionDisplay">Loading...</div>
+        </div>
+
+        <div class="input-wrapper">
+            <input type="text" id="answerInput" placeholder="Factored Form" readonly>
+        </div>
+    </main>
+
+    <!-- Custom Algebraic Keypad -->
+    <div id="keypad">
+        <button class="key-btn" data-val="1">1</button>
+        <button class="key-btn" data-val="2">2</button>
+        <button class="key-btn" data-val="3">3</button>
+        <button class="key-btn" data-val="+">+</button>
+
+        <button class="key-btn" data-val="4">4</button>
+        <button class="key-btn" data-val="5">5</button>
+        <button class="key-btn" data-val="6">6</button>
+        <button class="key-btn" data-val="-">-</button>
+
+        <button class="key-btn" data-val="7">7</button>
+        <button class="key-btn" data-val="8">8</button>
+        <button class="key-btn" data-val="9">9</button>
+        <button class="key-btn" data-val="(">(</button>
+
+        <button class="key-btn" data-val="x">x</button>
+        <button class="key-btn" data-val="0">0</button>
+        <button class="key-btn" data-val="^2">²</button>
+        <button class="key-btn" data-val=")">)</button>
+        
+        <button class="key-btn key-action" id="keyDel" style="grid-column: span 2;">DEL</button>
+        <button class="key-btn key-enter" id="keyEnter" style="grid-column: span 2;">ENTER</button>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">Level Cleared!</div>
+
+<!-- Stats Modal -->
+<div class="modal-overlay" id="statsModal">
+    <div class="modal">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2 style="margin:0;">Mastery Dashboard</h2>
+        </div>
+        <p>Your progress across all algebraic factoring methods.</p>
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="modal-actions">
+            <button class="btn btn-danger" id="resetBtn" style="font-size:0.8rem; padding: 8px 12px;">Reset Data</button>
+            <button class="btn" id="closeStats">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Tutorial Modal -->
+<div class="modal-overlay" id="tutorialModal">
+    <div class="modal">
+        <h2>Teacher's Note 🎓</h2>
+        <p id="tutorialText" style="font-size: 0.95rem;"></p>
+        <div class="modal-actions" style="justify-content: flex-end;">
+            <button class="btn" id="closeTutorialBtn">Got it!</button>
+        </div>
+    </div>
+</div>
+
+<!-- Level Complete Modal -->
+<div class="modal-overlay" id="levelCompleteModal">
+    <div class="modal">
+        <h2>Level Mastered! 🎉</h2>
+        <p>You have successfully completed all phases for this method. Proceed to the next factoring technique or stay here to practice more.</p>
+        <div class="modal-actions" style="justify-content: flex-end; gap:10px;">
+            <button class="btn btn-ghost" id="stayHereBtn">Practice</button>
+            <button class="btn" id="nextLevelBtn">Next Level</button>
+        </div>
+    </div>
+</div>
+
+<!-- Unlock Warning Modal -->
+<div class="modal-overlay" id="unlockModal">
+    <div class="modal">
+        <h2>Unlock Level?</h2>
+        <p>Enter the master passcode to unlock this level manually.</p>
+        <div style="margin-bottom: 15px;">
+            <input type="password" id="passcodeInput" class="modal-input" placeholder="Passcode">
+            <div id="passcodeError" style="color: var(--error); font-size: 0.85rem; margin-top: 5px; display: none; font-weight: bold;">Incorrect passcode.</div>
+        </div>
+        <div class="modal-actions" style="justify-content: flex-end; gap:10px;">
+            <button class="btn btn-ghost" id="cancelUnlock">Cancel</button>
+            <button class="btn" id="confirmUnlock">Unlock</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /**
+     * FACTORING ALGEBRA ENGINE & APP STATE
+     */
+    const LEVELS =[
+        { id: 1, label: "Monomials", desc: "Common monomial factoring" },
+        { id: 2, label: "Diff of Squares", desc: "e.g., x² - 9" },
+        { id: 3, label: "GCF + Diff of Sqr", desc: "e.g., 2x² - 18" },
+        { id: 4, label: "Monic All Pos", desc: "x² + bx + c (Positive)" },
+        { id: 5, label: "Monic Neg c", desc: "x² + bx - c" },
+        { id: 6, label: "Monic Neg b", desc: "x² - bx + c" },
+        { id: 7, label: "Mixed Monic", desc: "All monic quadratics" },
+        { id: 8, label: "GCF + Monic", desc: "e.g., 2x² + 10x + 12" },
+        { id: 9, label: "Mixed All", desc: "Master all methods" }
+    ];
+
+    const TEACHER_NOTES = {
+        1: "<strong>Common Monomial Factoring:</strong> Find the Greatest Common Factor (GCF) of all terms. Example: For <code>3x² - 6x</code>, the GCF is <code>3x</code>. Pull it out to get <code>3x(x - 2)</code>.<br><br><em>Tip: If the leading term is negative, always factor out a negative number! (e.g., <code>-2x - 4 = -2(x + 2)</code>)</em>",
+        2: "<strong>Difference of Two Squares:</strong> Use the pattern <code>a² - b² = (a - b)(a + b)</code>. Example: <code>x² - 25 = (x - 5)(x + 5)</code>.",
+        3: "<strong>GCF + Difference of Squares:</strong> First, factor out the GCF. Then, factor the remaining difference of squares. Example: <code>2x² - 18 = 2(x² - 9) = 2(x - 3)(x + 3)</code>.",
+        4: "<strong>Monic Quadratics (All Positive):</strong> For <code>x² + bx + c</code>, find two numbers that multiply to <code>c</code> and add to <code>b</code>. Example: <code>x² + 5x + 6 = (x + 2)(x + 3)</code>.",
+        5: "<strong>Monic Quadratics (Negative c):</strong> When the last term is negative, the factors will have opposite signs. Example: <code>x² + 2x - 8 = (x + 4)(x - 2)</code>.",
+        6: "<strong>Monic Quadratics (Positive c, Negative b):</strong> Both factors must be negative! Example: <code>x² - 5x + 6 = (x - 2)(x - 3)</code>.",
+        7: "<strong>Mixed Monic Quadratics:</strong> Apply everything you've learned about monic quadratics. Pay close attention to the signs!",
+        8: "<strong>GCF + Monic Quadratics:</strong> Factor out the common monomial first, then factor the quadratic completely. Example: <code>2x² + 10x + 12 = 2(x² + 5x + 6) = 2(x + 2)(x + 3)</code>.",
+        9: "<strong>Mixed All:</strong> The ultimate challenge! Identify the correct factoring method for each expression. Look out for GCFs first. Good luck!"
+    };
+
+    const STORAGE_KEY = 'factoring_mastery_v1'; 
+
+    let state = {
+        currentLevelId: 1,
+        unlockedMax: 1,
+        theme: 'light',
+        fastMode: false,
+        levelData: {}
+    };
+
+    let currentQueue = [];
+    let retryQueue =[]; 
+    let currentQuestion = null;
+    let pendingLevelUnlock = null;
+    let initialQueueSize = 0; 
+    let currentQuestionStartTime = 0;
+    let isFirstQuestion = true; 
+    let inputVal = "";
+    let isProcessing = false; 
+
+    // ---- MATH GENERATION ENGINE ----
+
+    function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+    function randNonZero(min, max) { let v = 0; while (v === 0) v = randInt(min, max); return v; }
+    function gcd(x, y) { x = Math.abs(x); y = Math.abs(y); while(y) { let t = y; y = x % y; x = t; } return x; }
+
+    function generateLevel(level) {
+        let k = 1, x_power = 0, binoms =[];
+        switch(level) {
+            case 1:
+                if (Math.random() < 0.6) {
+                    k = randNonZero(2, 6); if (Math.random() < 0.3) k = -k;
+                    x_power = 1;
+                    binoms =[{deg: 1, a: 1, b: randNonZero(-8, 8)}];
+                } else {
+                    k = randNonZero(2, 6); if (Math.random() < 0.3) k = -k;
+                    x_power = 0;
+                    binoms =[{deg: 2, a: 1, b: randInt(1, 8)}]; 
+                }
+                break;
+            case 2:
+                let a2 = randInt(1, 3); let b2 = randInt(1, 6);
+                while (gcd(a2, b2) !== 1) { a2 = randInt(1, 3); b2 = randInt(1, 6); }
+                binoms =[{deg: 1, a: a2, b: -b2}, {deg: 1, a: a2, b: b2}];
+                break;
+            case 3:
+                k = randInt(2, 5);
+                let a3 = randInt(1, 2); let b3 = randInt(1, 5);
+                while (gcd(a3, b3) !== 1) { a3 = randInt(1, 2); b3 = randInt(1, 5); }
+                binoms =[{deg: 1, a: a3, b: -b3}, {deg: 1, a: a3, b: b3}];
+                break;
+            case 4:
+                binoms =[{deg: 1, a: 1, b: randInt(1, 9)}, {deg: 1, a: 1, b: randInt(1, 9)}];
+                break;
+            case 5:
+                let r3 = randInt(1, 9); let r4 = randInt(1, 9);
+                while (r3 === r4) r4 = randInt(1, 9); 
+                binoms =[{deg: 1, a: 1, b: r3}, {deg: 1, a: 1, b: -r4}];
+                break;
+            case 6:
+                binoms =[{deg: 1, a: 1, b: -randInt(1, 9)}, {deg: 1, a: 1, b: -randInt(1, 9)}];
+                break;
+            case 7:
+                return generateLevel(randInt(4, 6));
+            case 8:
+                let q8 = generateLevel(randInt(4, 6)); 
+                return { k: randInt(2, 5), x_power: 0, binoms: q8.binoms };
+            case 9:
+                return generateLevel(randInt(1, 8));
+        }
+        return { k, x_power, binoms };
+    }
+
+    function expand(k, x_power, binoms) {
+        let poly = [1];
+        for (let b of binoms) {
+            let deg = b.deg || 1;
+            let newPoly = new Array(poly.length + deg).fill(0);
+            for (let i = 0; i < poly.length; i++) {
+                newPoly[i] += poly[i] * b.b; 
+                newPoly[i + deg] += poly[i] * b.a; 
+            }
+            poly = newPoly;
+        }
+        let finalPoly = new Array(poly.length + x_power).fill(0);
+        for (let i = 0; i < poly.length; i++) {
+            finalPoly[i + x_power] = poly[i] * k;
+        }
+        return finalPoly;
+    }
+
+    function formatPoly(poly) {
+        let str = "";
+        for (let i = poly.length - 1; i >= 0; i--) {
+            let c = poly[i];
+            if (c === 0) continue;
+            let term = "";
+            let absC = Math.abs(c);
+            if (i === 0) term = absC.toString();
+            else if (i === 1) term = (absC === 1 ? "" : absC) + "x";
+            else term = (absC === 1 ? "" : absC) + "x^2";
+            
+            if (str === "") str += (c < 0 ? "-" : "") + term;
+            else str += (c < 0 ? " - " : " + ") + term;
+        }
+        return str;
+    }
+
+    function formatBinomial(bObj) {
+        let a = bObj.a, b = bObj.b, deg = bObj.deg || 1;
+        let xStr = deg === 2 ? "x^2" : "x";
+        let ax = "";
+        if (a === 1) ax = xStr; else if (a === -1) ax = "-" + xStr; else if (a !== 0) ax = a + xStr;
+        let bStr = b > 0 ? "+" + b : b.toString();
+        
+        let res =[];
+        if (a !== 0 && b !== 0) {
+            res.push(`(${ax}${bStr})`);
+            let axWithSign = a > 0 ? "+" + ax : ax;
+            res.push(`(${b}${axWithSign})`);
+        } else if (a !== 0 && b === 0) {
+            res.push(`(${ax})`); 
+        } else if (a === 0 && b !== 0) {
+            res.push(`(${b})`);
+        }
+        return res;
+    }
+
+    function generateAcceptableAnswers(k, x_power, binoms) {
+        let prefix = "";
+        if (k === 1) {
+            if (x_power === 1) prefix = "x";
+            else if (x_power === 2) prefix = "x^2";
+        } else if (k === -1) {
+            if (x_power === 1) prefix = "-x";
+            else if (x_power === 2) prefix = "-x^2";
+            else if (x_power === 0) prefix = "-"; 
+        } else if (k !== 0) {
+            if (x_power === 1) prefix = k + "x";
+            else if (x_power === 2) prefix = k + "x^2";
+            else if (x_power === 0) prefix = k.toString();
+        }
+        
+        let prefixes = [prefix];
+        if (k === -1 && x_power === 0) prefixes.push("-1");
+        if (k === 1 && x_power === 0 && binoms.length === 0) prefixes = ["1"]; 
+        if (k === 1 && x_power === 0 && binoms.length > 0) prefixes = [""];
+        if (k === 1 && x_power === 1) prefixes.push("1x"); 
+        
+        let binomStrs = binoms.map(b => formatBinomial(b));
+        
+        function permute(arr) {
+            if (arr.length === 0) return [[]];
+            let result =[];
+            for (let i = 0; i < arr.length; i++) {
+                let rest = arr.slice(0, i).concat(arr.slice(i + 1));
+                let restPerms = permute(rest);
+                for (let p of restPerms) result.push([arr[i]].concat(p));
+            }
+            return result;
+        }
+        
+        let perms = permute(binomStrs); 
+        let answers = new Set();
+        
+        function cartesian(arrays) {
+            if (arrays.length === 0) return [[]];
+            let result =[];
+            let rest = cartesian(arrays.slice(1));
+            for (let val of arrays[0]) {
+                for (let r of rest) result.push([val].concat(r));
+            }
+            return result;
+        }
+
+        for (let p of perms) {
+            let combos = cartesian(p);
+            for (let c of combos) {
+                let binomJoined = c.join("");
+                for (let pref of prefixes) {
+                    answers.add(pref + binomJoined);
+                }
+            }
+        }
+        
+        if (binoms.length === 2 && binoms[0].a === binoms[1].a && binoms[0].b === binoms[1].b && binoms[0].deg === binoms[1].deg) {
+            let bStrs = formatBinomial(binoms[0]);
+            for (let bs of bStrs) {
+                for (let pref of prefixes) {
+                    answers.add(pref + bs + "^2");
+                }
+            }
+        }
+        
+        if (binoms.length === 0) {
+            for (let pref of prefixes) answers.add(pref);
+        }
+        
+        return Array.from(answers);
+    }
+
+    // ---- STRING NORMALIZATION ----
+
+    function prettyPrintMath(str) {
+        return str.replace(/\^2/g, '²');
+    }
+
+    function normalizeInput(str) {
+        str = str.replace(/²/g, '^2');
+        str = str.replace(/\s+/g, '');
+        str = str.replace(/\*/g, '');
+        str = str.replace(/(^|[^0-9])1x/g, '$1x');
+        str = str.replace(/\+-/g, '-');
+        str = str.replace(/\^1\b/g, '');
+        return str.toLowerCase();
+    }
+
+
+    // ---- APP INITIALIZATION & LOGIC ----
+
+    function init() {
+        loadState();
+        if(typeof state.fastMode === 'undefined') state.fastMode = false;
+        applyTheme();
+        applyFastMode();
+        setupEventListeners();
+        loadLevel(state.currentLevelId);
+    }
+
+    function loadState() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try { state = { ...state, ...JSON.parse(saved) }; } catch (e) {}
+        }
+    }
+
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+    function resetApp() {
+        if(confirm("Are you sure you want to reset all progress?")) {
+            localStorage.removeItem(STORAGE_KEY);
+            window.location.reload();
+        }
+    }
+
+    function loadLevel(levelId) {
+        state.currentLevelId = levelId;
+        saveState();
+
+        if (!state.levelData[levelId]) state.levelData[levelId] = { phase: 0, masteryDone: false };
+        
+        isFirstQuestion = true;
+        generateQueue(levelId);
+        nextQuestion();
+        renderUI();
+
+        if (state.levelData[levelId].phase === 0 && !state.levelData[levelId].masteryDone) {
+            showTutorial(levelId);
+        }
+    }
+
+    function generateQueue(levelId) {
+        currentQueue = [];
+        retryQueue =[];
+        const phase = state.levelData[levelId].phase || 0;
+        
+        let count = 10;
+        if (phase === 1) count = 15;
+        if (levelId === 9) count = 20;
+
+        for (let i = 0; i < count; i++) {
+            let qData = generateLevel(levelId);
+            let poly = expand(qData.k, qData.x_power, qData.binoms);
+            let displayStr = formatPoly(poly);
+            let validAnswers = generateAcceptableAnswers(qData.k, qData.x_power, qData.binoms);
+            
+            currentQueue.push({ display: displayStr, answers: validAnswers, qData: qData });
+        }
+        initialQueueSize = currentQueue.length;
+    }
+
+    function nextQuestion() {
+        const readyRetryIndex = retryQueue.findIndex(r => r.turnsLeft <= 0);
+        if (readyRetryIndex !== -1) {
+            currentQuestion = retryQueue.splice(readyRetryIndex, 1)[0].question;
+        } else if (currentQueue.length > 0) {
+            currentQuestion = currentQueue.shift();
+        } else if (retryQueue.length > 0) {
+            retryQueue.sort((a,b) => a.turnsLeft - b.turnsLeft);
+            currentQuestion = retryQueue.shift().question;
+        } else {
+            handleLevelComplete();
+            return;
+        }
+        renderQuestion();
+        renderProgressBar(); 
+    }
+
+    function handleLevelComplete() {
+        const levelId = state.currentLevelId;
+        let maxPhase = 1; 
+        if (levelId === 9) maxPhase = 0; 
+
+        let currentPhase = state.levelData[levelId].phase || 0;
+
+        if (currentPhase < maxPhase) {
+            state.levelData[levelId].phase = currentPhase + 1;
+            showToast(`Learning Phase Complete! Entering Mastery Check.`);
+            saveState();
+            loadLevel(levelId);
+        } else {
+            if (!state.levelData[levelId].masteryDone) {
+                state.levelData[levelId].masteryDone = true;
+                if (state.currentLevelId >= state.unlockedMax && state.currentLevelId < LEVELS.length) {
+                    state.unlockedMax = state.currentLevelId + 1;
+                }
+                saveState();
+                
+                if (levelId < LEVELS.length) {
+                    document.getElementById('levelCompleteModal').classList.add('open');
+                } else {
+                    showToast("You have mastered all factoring methods! 🎉");
+                    loadLevel(levelId); 
+                }
+            } else {
+                showToast("Practice session complete!");
+                loadLevel(levelId);
+            }
+        }
+    }
+
+    function handleKeypadInput(val) {
+        if (inputVal.length < 30) {
+            inputVal += val;
+            updateInputDisplay();
+        }
+    }
+
+    function deleteInput() {
+        if(inputVal.length > 0) {
+            if (inputVal.endsWith('^2')) inputVal = inputVal.slice(0, -2);
+            else inputVal = inputVal.slice(0, -1);
+            updateInputDisplay();
+        }
+    }
+
+    function updateInputDisplay() {
+        document.getElementById('answerInput').value = prettyPrintMath(inputVal);
+    }
+
+    function checkAnswer() {
+        if (isProcessing) return; 
+        let userStr = document.getElementById('answerInput').value;
+        if (!userStr) return;
+
+        isProcessing = true;
+        document.getElementById('keypad').classList.add('disabled');
+
+        let normalizedUser = normalizeInput(userStr);
+        let validAnswersNormalized = currentQuestion.answers.map(normalizeInput);
+        let isCorrect = validAnswersNormalized.includes(normalizedUser);
+
+        const timeTaken = Date.now() - currentQuestionStartTime;
+        const timeLimit = state.fastMode ? 5000 : 20000; 
+        let isSlow = timeTaken > timeLimit; 
+
+        if (isFirstQuestion) { isSlow = false; isFirstQuestion = false; }
+
+        const inputEl = document.getElementById('answerInput');
+
+        if (isCorrect && !isSlow) {
+            handleSuccess(inputEl);
+        } else {
+            let expected = prettyPrintMath(currentQuestion.answers[0]);
+            if (!isCorrect) handleError(inputEl, expected, `Expected: ${expected}`, false);
+            else handleError(inputEl, expected, `Correct, but too slow!`, true);
+        }
+    }
+
+    function handleSuccess(inputEl) {
+        inputEl.classList.add('success');
+        const feedback = document.getElementById('feedbackMsg');
+        feedback.className = 'sub-text'; feedback.textContent = "Correct!"; feedback.style.color = "var(--success)";
+        retryQueue.forEach(item => item.turnsLeft--);
+
+        setTimeout(() => {
+            inputEl.classList.remove('success'); inputVal = ''; updateInputDisplay();
+            feedback.innerHTML = '&nbsp;'; feedback.style.color = '';
+            isProcessing = false; document.getElementById('keypad').classList.remove('disabled');
+            nextQuestion();
+        }, 700);
+    }
+
+    function handleError(inputEl, correctAnswer, errorMsg, isSlowButCorrect) {
+        const feedback = document.getElementById('feedbackMsg');
+        feedback.style.color = ''; 
+        
+        if (isSlowButCorrect) { inputEl.classList.add('warning'); feedback.className = 'sub-text big-warning'; }
+        else { inputEl.classList.add('error'); feedback.className = 'sub-text big-error'; }
+        feedback.textContent = errorMsg;
+
+        retryQueue.push({ question: currentQuestion, turnsLeft: 2 });
+        retryQueue.forEach(item => { if (item.question !== currentQuestion) item.turnsLeft--; });
+
+        setTimeout(() => {
+            inputEl.classList.remove('error'); inputEl.classList.remove('warning');
+            inputVal = ''; updateInputDisplay();
+            setTimeout(() => {
+                feedback.className = 'sub-text'; feedback.innerHTML = '&nbsp;';
+                isProcessing = false; document.getElementById('keypad').classList.remove('disabled');
+                nextQuestion();
+            }, 1200);
+        }, 1500); 
+    }
+
+    // ---- UI RENDERING ----
+
+    function renderUI() {
+        renderLevelNav();
+        renderProgressBar();
+        const lvl = LEVELS.find(l => l.id === state.currentLevelId);
+        document.getElementById('levelLabel').textContent = "Level " + lvl.id;
+
+        const badge = document.getElementById('phaseBadge');
+        const lvlData = state.levelData[lvl.id] || { phase: 0 };
+        
+        if (lvlData.masteryDone) {
+            badge.textContent = "Mastered (Practice)"; badge.className = "phase-badge mastered";
+        } else {
+            if (lvl.id === 9) { badge.textContent = "Ultimate Mastery"; badge.className = "phase-badge super"; }
+            else if (lvlData.phase === 0) { badge.textContent = "Learning Phase"; badge.className = "phase-badge sequential"; }
+            else if (lvlData.phase === 1) { badge.textContent = "Mastery Check"; badge.className = "phase-badge random"; }
+        }
+    }
+
+    function renderQuestion() {
+        if(!currentQuestion) return;
+        currentQuestionStartTime = Date.now();
+        const el = document.getElementById('questionDisplay');
+        el.style.opacity = 0;
+        setTimeout(() => {
+            el.textContent = prettyPrintMath(currentQuestion.display);
+            el.style.opacity = 1;
+        }, 100);
+    }
+
+    function renderProgressBar() {
+        let remaining = currentQueue.length + (currentQuestion ? 1 : 0);
+        let progress = initialQueueSize > 0 ? Math.floor(((initialQueueSize - remaining) / initialQueueSize) * 100) : 0;
+        if (progress < 0) progress = 0; if (progress > 100) progress = 100;
+
+        document.getElementById('progressBar').style.width = `${progress}%`;
+        const lvlData = state.levelData[state.currentLevelId];
+        if (lvlData && lvlData.masteryDone) document.getElementById('progressPercent').textContent = `${progress}% (Practice Mode)`;
+        else document.getElementById('progressPercent').textContent = `${progress}% Completed (Current Phase)`;
+    }
+
+    function renderLevelNav() {
+        const nav = document.getElementById('levelNav');
+        nav.innerHTML = '';
+        LEVELS.forEach(lvl => {
+            const btn = document.createElement('button');
+            const isLocked = lvl.id > state.unlockedMax;
+            const isActive = lvl.id === state.currentLevelId;
+            btn.className = `level-chip ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}`;
+            btn.innerHTML = `${isLocked ? '🔒 ' : ''}${lvl.label}`;
+            btn.onclick = () => handleLevelClick(lvl.id, isLocked);
+            nav.appendChild(btn);
+        });
+    }
+
+    function handleLevelClick(id, isLocked) {
+        if (id === state.currentLevelId) return;
+        if (isLocked) {
+            pendingLevelUnlock = id;
+            document.getElementById('unlockModal').classList.add('open');
+            document.getElementById('passcodeInput').focus();
+        } else {
+            loadLevel(id);
+        }
+    }
+
+    // ---- SETTINGS & LISTENERS ----
+
+    function applyTheme() { document.body.setAttribute('data-theme', state.theme); }
+    function applyFastMode() {
+        const btn = document.getElementById('fastModeToggle');
+        if (state.fastMode) { btn.style.color = "var(--warning)"; btn.style.background = "rgba(253, 203, 110, 0.15)"; }
+        else { btn.style.color = ""; btn.style.background = ""; }
+    }
+
+    function showTutorial(levelId) {
+        document.getElementById('tutorialText').innerHTML = TEACHER_NOTES[levelId] || "Factor the expression completely.";
+        document.getElementById('tutorialModal').classList.add('open');
+    }
+
+    function setupEventListeners() {
+        document.querySelectorAll(".key-btn[data-val]").forEach(btn => {
+            btn.addEventListener("click", () => handleKeypadInput(btn.getAttribute("data-val")));
+        });
+        document.getElementById("keyDel").addEventListener("click", deleteInput);
+        document.getElementById("keyEnter").addEventListener("click", checkAnswer);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' && e.target.id !== 'answerInput') return;
+            
+            if (document.getElementById('levelCompleteModal').classList.contains('open')) {
+                if(e.key === 'Enter') { e.preventDefault(); document.getElementById('nextLevelBtn').click(); }
+                return;
+            }
+            if (isProcessing) return;
+
+            let validKeys =['1','2','3','4','5','6','7','8','9','0','x','+','-','(',')','^'];
+            let k = e.key.toLowerCase();
+            if (validKeys.includes(k)) {
+                handleKeypadInput(k); triggerKeyVisual(k);
+            } else if (e.key === 'Backspace') {
+                deleteInput(); triggerKeyVisual('Backspace');
+            } else if (e.key === 'Enter') {
+                checkAnswer(); triggerKeyVisual('Enter');
+            }
+        });
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            state.theme = state.theme === 'light' ? 'dark' : 'light'; saveState(); applyTheme();
+        });
+        document.getElementById('fastModeToggle').addEventListener('click', () => {
+            state.fastMode = !state.fastMode; saveState(); applyFastMode();
+            showToast(state.fastMode ? "Fast Mode Enabled (5s)" : "Normal Mode Reverted (20s)");
+        });
+        document.getElementById('helpBtn').addEventListener('click', () => showTutorial(state.currentLevelId));
+        document.getElementById('closeTutorialBtn').addEventListener('click', () => {
+            document.getElementById('tutorialModal').classList.remove('open');
+        });
+
+        document.getElementById('relockBtn').addEventListener('click', () => {
+            if (confirm("Are you sure you want to re-lock this level? Higher levels will also be locked.")) {
+                const targetLevel = state.currentLevelId;
+                state.unlockedMax = Math.max(1, targetLevel - 1);
+                for(let i = targetLevel; i <= LEVELS.length; i++) state.levelData[i] = { phase: 0, masteryDone: false };
+                if (targetLevel > 1) state.levelData[targetLevel - 1] = { phase: 0, masteryDone: false };
+                else state.levelData[1] = { phase: 0, masteryDone: false };
+                saveState(); loadLevel(state.unlockedMax);
+                showToast("Level re-locked and progress reset.");
+            }
+        });
+
+        document.getElementById('statsBtn').addEventListener('click', () => {
+            const grid = document.getElementById('statsGrid');
+            grid.innerHTML = '';
+            LEVELS.forEach(lvl => {
+                const cell = document.createElement('div');
+                const isMastered = state.levelData[lvl.id]?.masteryDone;
+                cell.className = `stat-cell ${isMastered ? 'mastered' : ''}`;
+                cell.innerHTML = `<div>Lvl ${lvl.id}</div><div style="font-size:0.7rem; font-weight:normal; margin-top:4px;">${isMastered ? 'Mastered' : 'Locked / Prog'}</div>`;
+                grid.appendChild(cell);
+            });
+            document.getElementById('statsModal').classList.add('open');
+        });
+        document.getElementById('closeStats').addEventListener('click', () => document.getElementById('statsModal').classList.remove('open'));
+        document.getElementById('resetBtn').addEventListener('click', resetApp);
+
+        document.getElementById('cancelUnlock').addEventListener('click', () => {
+            document.getElementById('unlockModal').classList.remove('open');
+            document.getElementById('passcodeInput').value = ''; document.getElementById('passcodeError').style.display = 'none'; pendingLevelUnlock = null;
+        });
+        document.getElementById('confirmUnlock').addEventListener('click', () => {
+            if (document.getElementById('passcodeInput').value === "061415") {
+                document.getElementById('unlockModal').classList.remove('open');
+                document.getElementById('passcodeInput').value = ''; document.getElementById('passcodeError').style.display = 'none';
+                if (pendingLevelUnlock) {
+                    state.unlockedMax = Math.max(state.unlockedMax, pendingLevelUnlock);
+                    saveState(); loadLevel(pendingLevelUnlock); pendingLevelUnlock = null;
+                }
+            } else document.getElementById('passcodeError').style.display = 'block';
+        });
+        document.getElementById('passcodeInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('confirmUnlock').click(); });
+
+        document.getElementById('stayHereBtn').addEventListener('click', () => { document.getElementById('levelCompleteModal').classList.remove('open'); loadLevel(state.currentLevelId); });
+        document.getElementById('nextLevelBtn').addEventListener('click', () => {
+            document.getElementById('levelCompleteModal').classList.remove('open');
+            if (state.currentLevelId + 1 <= LEVELS.length) loadLevel(state.currentLevelId + 1);
+        });
+    }
+
+    function triggerKeyVisual(val) {
+        let btn;
+        if (val === 'Backspace') btn = document.getElementById('keyDel');
+        else if (val === 'Enter') btn = document.getElementById('keyEnter');
+        else if (val === '^') btn = document.querySelector(`.key-btn[data-val="^2"]`);
+        else btn = document.querySelector(`.key-btn[data-val="${val}"]`);
+        
+        if(btn) { btn.classList.add('active-visual'); setTimeout(() => btn.classList.remove('active-visual'), 100); }
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    init();
+</script>
+</body>
+</html>
