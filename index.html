@@ -383,9 +383,9 @@
     function gcd(x, y) { x = Math.abs(x); y = Math.abs(y); while(y) { let t = y; y = x % y; x = t; } return x; }
 
     function getBounds(phase) {
-        if(phase === 0) return { rMin: 1, rMax: 4, kMax: 3 }; // Easy
-        if(phase === 1) return { rMin: 3, rMax: 8, kMax: 5 }; // Moderate
-        if(phase === 2) return { rMin: 6, rMax: 15, kMax: 9 }; // Hard
+        if(phase === 0) return { rMin: 1, rMax: 5, kMax: 5 }; // Easy
+        if(phase === 1) return { rMin: 3, rMax: 8, kMax: 8 }; // Moderate
+        if(phase === 2) return { rMin: 6, rMax: 10, kMax: 10 }; // Hard
         return { rMin: 1, rMax: 12, kMax: 7 }; // Practice
     }
 
